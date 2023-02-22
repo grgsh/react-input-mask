@@ -149,7 +149,7 @@ function InvalidInput(props) {
 # Known Issues
 ### Autofill
 Browser's autofill requires either empty value in input or value which exactly matches beginning of the autofilled value. I.e. autofilled value "+1 (555) 123-4567" will work with "+1" or "+1 (5", but won't work with "+1 (\_\_\_) \_\_\_-\_\_\_\_" or "1 (555)". There are several possible solutions:
-1. Set `maskChar` to null and trim space after "+1" with `beforeMaskedStateChange` if no more digits are entered.
+1. Set `maskPlaceholder` to null and trim space after "+1" with `beforeMaskedStateChange` if no more digits are entered.
 2. Apply mask only if value is not empty. In general, this is the most reliable solution because we can't be sure about formatting in autofilled value.
 3. Use less formatting in the mask.
 
