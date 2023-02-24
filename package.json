@@ -1,7 +1,7 @@
 {
   "name": "@mona-health/react-input-mask",
   "description": "(yet another) Masked input component for React",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "homepage": "https://github.com/mona-health/react-input-mask",
   "license": "MIT",
   "author": "Nikita Lobachev <sanniassin@gmail.com>",
