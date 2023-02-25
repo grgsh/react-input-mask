@@ -1,11 +1,13 @@
 {
   "name": "@mona-health/react-input-mask",
   "description": "(yet another) Masked input component for React",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "homepage": "https://github.com/mona-health/react-input-mask",
   "license": "MIT",
   "author": "Nikita Lobachev <sanniassin@gmail.com>",
-  "contributors": ["Ian Channing <ian.channing@mona.health>"],
+  "contributors": [
+    "Ian Channing <ian.channing@mona.health>"
+  ],
   "keywords": [
     "react",
     "input",
