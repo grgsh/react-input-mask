@@ -38,7 +38,7 @@ function DateInput(props) {
       onChange={props.onChange}
       value={props.value}
     />
-  )
+  );
 }
 ```
 
@@ -74,11 +74,11 @@ More complex masks can be defined as an array of regular expressions and constan
 
 ```jsx
 // Canadian postal code mask
-const firstLetter = /(?!.*[DFIOQU])[A-VXY]/i
-const letter = /(?!.*[DFIOQU])[A-Z]/i
-const digit = /[0-9]/
-const mask = [firstLetter, digit, letter, ' ', digit, letter, digit]
-return <InputMask mask={mask} />
+const firstLetter = /(?!.*[DFIOQU])[A-VXY]/i;
+const letter = /(?!.*[DFIOQU])[A-Z]/i;
+const digit = /[0-9]/;
+const mask = [firstLetter, digit, letter, " ", digit, letter, digit];
+return <InputMask mask={mask} />;
 ```
 
 ### `maskPlaceholder`
@@ -117,15 +117,15 @@ Selection positions will be `null` if input isn't focused and during rendering.
 ```jsx
 // Trim trailing slashes
 function beforeMaskedStateChange({ nextState }) {
-  let { value } = nextState
+  let { value } = nextState;
   if (value.endsWith('/')) {
-    value = value.slice(0, -1)
+    value = value.slice(0, -1);
   }
 
   return {
     ...nextState,
     value
-  }
+  };
 }
 
 return (
@@ -134,7 +134,7 @@ return (
     maskPlaceholder={null}
     beforeMaskedStateChange={beforeMaskedStateChange}
   />
-)
+);
 ```
 
 Please note that `beforeMaskedStateChange` executes more often than `onChange` and must be pure.
@@ -144,9 +144,9 @@ Please note that `beforeMaskedStateChange` executes more often than `onChange` a
 To use another component instead of regular `<input />` provide it as children. The following properties, if used, should always be defined on the `InputMask` component itself: `onChange`, `onMouseDown`, `onFocus`, `onBlur`, `value`, `disabled`, `readOnly`.
 
 ```jsx
-import React from 'react'
-import InputMask from '@mona-health/react-input-mask'
-import MaterialInput from '@material-ui/core/Input'
+import React from 'react';
+import InputMask from '@mona-health/react-input-mask';
+import MaterialInput from '@material-ui/core/Input';
 
 // Will work fine
 function Input(props) {
@@ -154,7 +154,7 @@ function Input(props) {
     <InputMask mask="99/99/9999" value={props.value} onChange={props.onChange}>
       <MaterialInput type="tel" disableUnderline />
     </InputMask>
-  )
+  );
 }
 
 // Will throw an error because InputMask's and children's onChange props aren't the same
@@ -163,9 +163,43 @@ function InvalidInput(props) {
     <InputMask mask="99/99/9999" value={props.value}>
       <MaterialInput type="tel" disableUnderline onChange={props.onChange} />
     </InputMask>
-  )
+  );
 }
 ```
+
+**Caveat**: `React.StrictMode` gives a warning for that previous method used for finding the input DOM node within the React component children. To remove this the children component is now either:
+
+1. a function component that implments `React.forwardRef`
+
+    ```jsx
+    const FunctionalInputComponent = React.forwardRef((props, ref) => {
+      return (
+        <input ref={ref} {...props} />
+      );
+    });
+    ```
+2. a class component that is wrapped in a function component that implements `React.forwardRef` (`innerRef` can be called anything as long as it's not `ref`)
+
+    ```jsx
+    class InnerClassInputComponent extends React.Component {
+      render() {
+        const { innerRef, ...restProps } = this.props;
+        return (
+          <div>
+            <input ref={innerRef} {...restProps} />
+          </div>
+        );
+      }
+    }
+
+    const ClassInputComponent = React.forwardRef((props, ref) => {
+      return <InnerClassInputComponent innerRef={ref} {...props} />;
+    });
+    ```
+
+Direct child class components are no longer supported.
+
+For more information see the [Material UI Composition guide - caveat with Refs](https://mui.com/material-ui/guides/composition/#caveat-with-refs).
 
 # Known Issues
 
@@ -187,7 +221,7 @@ The following sequence could fail
 cy.get('input')
   .focus()
   .type('12345')
-  .should('have.value', '12/34/5___') // expected <input> to have value 12/34/5___, but the value was 23/45/____
+  .should('have.value', '12/34/5___'); // expected <input> to have value 12/34/5___, but the value was 23/45/____
 ```
 
 Since [focus is not an action command](https://docs.cypress.io/api/commands/focus.html#Focus-is-not-an-action-command), it behaves differently than the real user interaction and, therefore, less reliable.
@@ -212,7 +246,7 @@ cy.get('input')
   .focus()
   .wait(50)
   .type('12345')
-  .should('have.value', '12/34/5___')
+  .should('have.value', '12/34/5___');
 ```
 
 # Building
