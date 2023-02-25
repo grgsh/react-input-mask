@@ -167,7 +167,7 @@ function InvalidInput(props) {
 }
 ```
 
-**Caveat**: `React.StrictMode` gives a warning for that previous method used for finding the input DOM node within the React component children. To remove this the children component is now either:
+**Caveat**: To support both class and function component children InputMask used to use `ReactDOM.findDOMNode`, which is now [deprecated](https://reactjs.org/docs/strict-mode.html#warning-about-deprecated-finddomnode-usage). To handle removing this, direct child class components are **no longer supported**. The `children` component is now either:
 
 1. a function component that implments `React.forwardRef`
 
@@ -196,8 +196,6 @@ function InvalidInput(props) {
       return <InnerClassInputComponent innerRef={ref} {...props} />;
     });
     ```
-
-Direct child class components are no longer supported.
 
 For more information see the [Material UI Composition guide - caveat with Refs](https://mui.com/material-ui/guides/composition/#caveat-with-refs).
 
