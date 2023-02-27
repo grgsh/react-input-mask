@@ -20,10 +20,10 @@ Input masking component for React. Made with attention to UX.
 # Installation
 
 ```sh
-npm install mona-health/react-input-mask@next --save
+npm install --save mona-health/react-input-mask@alpha
 ```
 
-react-input-mask requires **React 16.8.0 or later.** If you need support for older versions, use [version 2](https://github.com/sanniassin/react-input-mask/tree/v2).
+react-input-mask v3 requires **React 16.8.0 or later.** If you need support for older versions, use [version 2](https://github.com/sanniassin/react-input-mask/tree/v2).
 
 # Usage
 
