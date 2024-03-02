@@ -4,7 +4,7 @@ import { defer, cancelDefer } from "./utils/defer";
 import {
   setInputSelection,
   getInputSelection,
-  isInputFocused
+  isInputFocused,
 } from "./utils/input";
 import { isDOMElement } from "./utils/helpers";
 
@@ -25,7 +25,7 @@ export function useInputElement(inputRef) {
 
     if (!input) {
       throw new Error(
-        "react-input-mask: inputComponent doesn't contain input node"
+        "react-input-mask: inputComponent doesn't contain input node",
       );
     }
 
@@ -77,12 +77,10 @@ function useSelection(inputRef, isMasked) {
     return getInputSelection(input);
   }, [getInputElement]);
 
-  const getLastSelection = useCallback(() => {
-    return selectionRef.current;
-  }, []);
+  const getLastSelection = useCallback(() => selectionRef.current, []);
 
   const setSelection = useCallback(
-    selection => {
+    (selection) => {
       const input = getInputElement();
 
       // Don't change selection on unfocused input
@@ -96,7 +94,7 @@ function useSelection(inputRef, isMasked) {
       // Use actual selection in case the requested one was out of range
       selectionRef.current = getSelection();
     },
-    [getInputElement, getSelection]
+    [getInputElement, getSelection],
   );
 
   const selectionLoop = useCallback(() => {
@@ -137,12 +135,10 @@ function useValue(inputRef, initialValue) {
     return input.value;
   }, [getInputElement]);
 
-  const getLastValue = useCallback(() => {
-    return valueRef.current;
-  }, []);
+  const getLastValue = useCallback(() => valueRef.current, []);
 
   const setValue = useCallback(
-    newValue => {
+    (newValue) => {
       valueRef.current = newValue;
 
       const input = getInputElement();
@@ -150,13 +146,13 @@ function useValue(inputRef, initialValue) {
         input.value = newValue;
       }
     },
-    [getInputElement]
+    [getInputElement],
   );
 
   return {
     getValue,
     getLastValue,
-    setValue
+    setValue,
   };
 }
 
@@ -164,21 +160,21 @@ export function useInputState(initialValue, isMasked) {
   const inputRef = useRef();
   const { getSelection, getLastSelection, setSelection } = useSelection(
     inputRef,
-    isMasked
+    isMasked,
   );
   const { getValue, getLastValue, setValue } = useValue(inputRef, initialValue);
 
   function getLastInputState() {
     return {
       value: getLastValue(),
-      selection: getLastSelection()
+      selection: getLastSelection(),
     };
   }
 
   function getInputState() {
     return {
       value: getValue(),
-      selection: getSelection()
+      selection: getSelection(),
     };
   }
 
@@ -191,7 +187,7 @@ export function useInputState(initialValue, isMasked) {
     inputRef,
     getInputState,
     getLastInputState,
-    setInputState
+    setInputState,
   };
 }
 

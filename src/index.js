@@ -5,7 +5,7 @@ import { useInputState, useInputElement, usePrevious } from "./hooks";
 import {
   validateMaxLength,
   validateChildren,
-  validateMaskPlaceholder
+  validateMaskPlaceholder,
 } from "./validate-props";
 
 import { defer } from "./utils/defer";
@@ -13,6 +13,7 @@ import { isInputFocused } from "./utils/input";
 import { isFunction, toString, getElementDocument } from "./utils/helpers";
 import MaskUtils from "./utils/mask";
 
+// eslint-disable-next-line prefer-arrow-callback
 const InputMask = forwardRef(function InputMask(props, forwardedRef) {
   const {
     alwaysShowMask,
@@ -33,15 +34,11 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
   const isControlled = props.value !== null && props.value !== undefined;
   const previousIsMasked = usePrevious(isMasked);
   const initialValue = toString(
-    (isControlled ? props.value : props.defaultValue) || ""
+    (isControlled ? props.value : props.defaultValue) || "",
   );
 
-  const {
-    inputRef,
-    getInputState,
-    setInputState,
-    getLastInputState
-  } = useInputState(initialValue, isMasked);
+  const { inputRef, getInputState, setInputState, getLastInputState } =
+    useInputState(initialValue, isMasked);
   const getInputElement = useInputElement(inputRef);
 
   function onChange(event) {
@@ -53,7 +50,7 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
       newInputState = beforeMaskedStateChange({
         currentState,
         previousState,
-        nextState: newInputState
+        nextState: newInputState,
       });
     }
 
@@ -75,13 +72,13 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
       let newSelection = maskUtils.getDefaultSelectionForValue(newValue);
       let newInputState = {
         value: newValue,
-        selection: newSelection
+        selection: newSelection,
       };
 
       if (beforeMaskedStateChange) {
         newInputState = beforeMaskedStateChange({
           currentState: getInputState(),
-          nextState: newInputState
+          nextState: newInputState,
         });
         newValue = newInputState.value;
         newSelection = newInputState.selection;
@@ -113,13 +110,13 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
       let newValue = "";
       let newInputState = {
         value: newValue,
-        selection: { start: null, end: null }
+        selection: { start: null, end: null },
       };
 
       if (beforeMaskedStateChange) {
         newInputState = beforeMaskedStateChange({
           currentState: getInputState(),
-          nextState: newInputState
+          nextState: newInputState,
         });
         newValue = newInputState.value;
       }
@@ -153,7 +150,7 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
       const mouseDownY = event.clientY;
       const mouseDownTime = new Date().getTime();
 
-      const mouseUpHandler = mouseUpEvent => {
+      const mouseUpHandler = (mouseUpEvent) => {
         inputDocument.removeEventListener("mouseup", mouseUpHandler);
 
         if (!isInputFocused(input)) {
@@ -171,11 +168,11 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
         ) {
           const lastState = getLastInputState();
           const newSelection = maskUtils.getDefaultSelectionForValue(
-            lastState.value
+            lastState.value,
           );
           const newState = {
             ...lastState,
-            selection: newSelection
+            selection: newSelection,
           };
           setInputState(newState);
         }
@@ -201,13 +198,13 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
 
     if (beforeMaskedStateChange) {
       newValue = beforeMaskedStateChange({
-        nextState: { value: newValue, selection: { start: null, end: null } }
+        nextState: { value: newValue, selection: { start: null, end: null } },
       }).value;
     }
 
     setInputState({
       ...getLastInputState(),
-      value: newValue
+      value: newValue,
     });
   }
 
@@ -246,7 +243,7 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
     if (isFocused && !previousIsMasked) {
       // Adjust selection if input got masked while being focused
       newInputState.selection = maskUtils.getDefaultSelectionForValue(
-        newInputState.value
+        newInputState.value,
       );
     } else if (isControlled && isFocused && previousSelection) {
       // Restore cursor position if value has changed outside change event
@@ -258,14 +255,14 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
     if (beforeMaskedStateChange) {
       newInputState = beforeMaskedStateChange({
         currentState,
-        nextState: newInputState
+        nextState: newInputState,
       });
     }
 
     setInputState(newInputState);
   });
 
-  const refCallback = node => {
+  const refCallback = (node) => {
     inputRef.current = node;
 
     // if a ref callback is passed to InputMask
@@ -282,7 +279,7 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
     onBlur,
     onChange: isMasked && isEditable ? onChange : props.onChange,
     onMouseDown: isMasked && isEditable ? onMouseDown : props.onMouseDown,
-    value: isMasked && isControlled ? lastValue : props.value
+    value: isMasked && isControlled ? lastValue : props.value,
   };
 
   if (children) {
@@ -300,7 +297,7 @@ InputMask.displayName = "InputMask";
 
 InputMask.defaultProps = {
   alwaysShowMask: false,
-  maskPlaceholder: "_"
+  maskPlaceholder: "_",
 };
 
 InputMask.propTypes = {
@@ -310,14 +307,14 @@ InputMask.propTypes = {
   mask: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(
-      PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
-    )
+      PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)]),
+    ),
   ]),
   maskPlaceholder: PropTypes.string,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
-  onMouseDown: PropTypes.func
+  onMouseDown: PropTypes.func,
 };
 
 export default InputMask;
