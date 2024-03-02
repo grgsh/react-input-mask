@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": "Nikita Lobachev <sanniassin@gmail.com>",
   "contributors": [
-    "Ian Channing <ian.channing@mona.health>"
+    "Ian Channing <ian_channing@hotmail.com>"
   ],
   "keywords": [
     "react",
@@ -64,6 +64,7 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-size-snapshot": "^0.10.0",
     "rollup-plugin-terser": "^5.2.0",
+    "typescript": "^5.3.3",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
@@ -91,7 +92,8 @@
     "test": "npm run build && npm run test:input && npm run test:server-render && npm run test:build",
     "test:input": "cross-env NODE_ENV=test BABEL_ENV=test karma start",
     "test:server-render": "cross-env BABEL_ENV=test mocha --require @babel/register ./tests/server-render",
-    "test:build": "cross-env BABEL_ENV=test mocha --require @babel/register ./tests/build"
+    "test:build": "cross-env BABEL_ENV=test mocha --require @babel/register ./tests/build",
+    "types": "tsc"
   },
   "repository": {
     "type": "git",
