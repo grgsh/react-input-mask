@@ -3,6 +3,7 @@
 <!--
 [![Build Status](https://img.shields.io/travis/sanniassin/react-input-mask/master.svg?style=flat)](https://travis-ci.org/sanniassin/react-input-mask) [![npm version](https://img.shields.io/npm/v/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/react-input-mask) [![npm downloads](https://img.shields.io/npm/dm/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/react-input-mask)
 -->
+
 [![npm version](https://img.shields.io/npm/v/@mona-health/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/@mona-health/react-input-mask)
 
 Input masking component for React. Made with attention to UX.
@@ -27,8 +28,8 @@ react-input-mask v3 requires **React 16.8.0 or later.** If you need support for 
 # Usage
 
 ```jsx
-import React from 'react'
-import InputMask from '@mona-health/react-input-mask'
+import React from "react";
+import InputMask from "@mona-health/react-input-mask";
 
 function DateInput(props) {
   return (
@@ -117,13 +118,13 @@ Selection positions will be `null` if input isn't focused and during rendering.
 // Trim trailing slashes
 function beforeMaskedStateChange({ nextState }) {
   let { value } = nextState;
-  if (value.endsWith('/')) {
+  if (value.endsWith("/")) {
     value = value.slice(0, -1);
   }
 
   return {
     ...nextState,
-    value
+    value,
   };
 }
 
@@ -143,9 +144,9 @@ Please note that `beforeMaskedStateChange` executes more often than `onChange` a
 To use another component instead of regular `<input />` provide it as children. The following properties, if used, should always be defined on the `InputMask` component itself: `onChange`, `onMouseDown`, `onFocus`, `onBlur`, `value`, `disabled`, `readOnly`.
 
 ```jsx
-import React from 'react';
-import InputMask from '@mona-health/react-input-mask';
-import MaterialInput from '@material-ui/core/Input';
+import React from "react";
+import InputMask from "@mona-health/react-input-mask";
+import MaterialInput from "@material-ui/core/Input";
 
 // Will work fine
 function Input(props) {
@@ -170,31 +171,30 @@ function InvalidInput(props) {
 
 1. a function component that implments `React.forwardRef`
 
-    ```jsx
-    const FunctionalInputComponent = React.forwardRef((props, ref) => {
-      return (
-        <input ref={ref} {...props} />
-      );
-    });
-    ```
+   ```jsx
+   const FunctionalInputComponent = React.forwardRef((props, ref) => {
+     return <input ref={ref} {...props} />;
+   });
+   ```
+
 2. a class component that is wrapped in a function component that implements `React.forwardRef` (`innerRef` can be called anything as long as it's not `ref`)
 
-    ```jsx
-    class InnerClassInputComponent extends React.Component {
-      render() {
-        const { innerRef, ...restProps } = this.props;
-        return (
-          <div>
-            <input ref={innerRef} {...restProps} />
-          </div>
-        );
-      }
-    }
+   ```jsx
+   class InnerClassInputComponent extends React.Component {
+     render() {
+       const { innerRef, ...restProps } = this.props;
+       return (
+         <div>
+           <input ref={innerRef} {...restProps} />
+         </div>
+       );
+     }
+   }
 
-    const ClassInputComponent = React.forwardRef((props, ref) => {
-      return <InnerClassInputComponent innerRef={ref} {...props} />;
-    });
-    ```
+   const ClassInputComponent = React.forwardRef((props, ref) => {
+     return <InnerClassInputComponent innerRef={ref} {...props} />;
+   });
+   ```
 
 For more information see the [Material UI Composition guide - caveat with Refs](https://mui.com/material-ui/guides/composition/#caveat-with-refs).
 
@@ -215,10 +215,7 @@ Please note that it might lead to worse user experience (should I enter +1 if in
 The following sequence could fail
 
 ```js
-cy.get('input')
-  .focus()
-  .type('12345')
-  .should('have.value', '12/34/5___'); // expected <input> to have value 12/34/5___, but the value was 23/45/____
+cy.get("input").focus().type("12345").should("have.value", "12/34/5___"); // expected <input> to have value 12/34/5___, but the value was 23/45/____
 ```
 
 Since [focus is not an action command](https://docs.cypress.io/api/commands/focus.html#Focus-is-not-an-action-command), it behaves differently than the real user interaction and, therefore, less reliable.
@@ -228,27 +225,22 @@ There is a few possible workarounds
 ```js
 // Start typing without calling focus() explicitly.
 // type() is an action command and focuses input anyway
-cy.get('input')
-  .type('12345')
-  .should('have.value', '12/34/5___')
+cy.get("input").type("12345").should("have.value", "12/34/5___");
 
 // Use click() instead of focus()
-cy.get('input')
-  .click()
-  .type('12345')
-  .should('have.value', '12/34/5___')
+cy.get("input").click().type("12345").should("have.value", "12/34/5___");
 
 // Or wait a little after focus()
-cy.get('input')
+cy.get("input")
   .focus()
   .wait(50)
-  .type('12345')
-  .should('have.value', '12/34/5___');
+  .type("12345")
+  .should("have.value", "12/34/5___");
 ```
 
 # Building
 
-Running `npm install` runs `lint`, `test`, `clean` and `build` scripts too.
+Running `npm install` runs `lint`, `test`, `clean`, `types` and `build` scripts too.
 
 Set the `CHROME_BIN` environment variable which is the path to the Chrome binary to prevent karma errors in `npm run test`.
 
