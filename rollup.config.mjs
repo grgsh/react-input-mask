@@ -1,10 +1,9 @@
-import babel from "rollup-plugin-babel";
-import { terser } from "rollup-plugin-terser";
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import replace from "rollup-plugin-replace";
-import { sizeSnapshot } from "rollup-plugin-size-snapshot";
-import protoToAssign from "./rollup.proto-to-assign.plugin";
+import { babel } from "@rollup/plugin-babel";
+import terser from "@rollup/plugin-terser";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import replace from "@rollup/plugin-replace";
+import protoToAssign from "./rollup.proto-to-assign.plugin.mjs";
 
 const input = "./src/index.js";
 
@@ -14,13 +13,7 @@ const isExternal = (id) =>
   !id.startsWith("\0") && !id.startsWith(".") && !id.startsWith("/");
 
 const external = ["react", "react-dom"];
-const plugins = [
-  babel(),
-  resolve(),
-  commonjs(),
-  protoToAssign(),
-  sizeSnapshot(),
-];
+const plugins = [babel(), nodeResolve(), commonjs(), protoToAssign()];
 const minifiedPlugins = [
   ...plugins,
   replace({
