@@ -72,6 +72,7 @@
     "webpack-dev-server": "^5.0.2"
   },
   "main": "index.js",
+  "types": "./dist/index.js",
   "files": [
     "lib",
     "dist"
@@ -83,7 +84,7 @@
     "clean": "rimraf lib dist",
     "build": "cross-env BABEL_ENV=rollup rollup -c",
     "start": "cross-env BABEL_ENV=test NODE_ENV=development webpack-dev-server",
-    "prepare": "husky",
+    "prepare": "husky && npm run lint && npm test && npm run clean && npm run types",
     "lint": "eslint ./src ./tests ./*.js",
     "lint-fix": "eslint --fix ./src ./tests ./*.js",
     "test": "npm run build && npm run test:input && npm run test:server-render && npm run test:build",
