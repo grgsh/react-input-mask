@@ -33,4 +33,18 @@ module.exports = {
     ],
     "prettier/prettier": ERROR,
   },
+  overrides: [
+    {
+      files: [
+        "*.config.js",
+        "*.config.mjs",
+        "webpack.config.js",
+        "rollup.config.mjs",
+        "karma.conf.js",
+      ],
+      rules: {
+        "import/no-extraneous-dependencies": [ERROR, { devDependencies: true }],
+      },
+    },
+  ],
 };
