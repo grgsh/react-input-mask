@@ -6,9 +6,9 @@ export const CONTROLLED_PROPS = [
   "onMouseDown",
   "readOnly",
   "value",
-];
+] as const;
 
-export const defaultFormatChars = {
+export const defaultFormatChars: Record<string, RegExp> = {
   9: /[0-9]/,
   a: /[A-Za-z]/,
   "*": /[A-Za-z0-9]/,

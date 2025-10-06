@@ -14,18 +14,20 @@ module.exports = {
     filename: "[name].js",
   },
   resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     modules: ["node_modules", "."],
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         use: {
           loader: "babel-loader",
           options: {
             presets: [
               ["@babel/preset-env", { targets: "Chrome > 70" }],
               "@babel/preset-react",
+              "@babel/preset-typescript",
             ],
           },
         },

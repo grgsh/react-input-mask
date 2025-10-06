@@ -6,7 +6,7 @@ import ReactDOM from "react-dom";
 import TestUtils from "react-dom/test-utils";
 import { expect } from "chai"; // eslint-disable-line import/no-extraneous-dependencies
 import * as deferUtils from "../../src/utils/defer";
-import Input from "../../src";
+import Input from "../../src/index";
 import { getInputSelection } from "../../src/utils/input";
 
 document.body.innerHTML = '<div id="container"></div>';

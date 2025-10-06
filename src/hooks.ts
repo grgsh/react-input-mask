@@ -1,14 +1,23 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  RefObject,
+} from "react";
 
-import { defer, cancelDefer } from "./utils/defer";
+import { defer, cancelDefer } from "./utils/defer.ts";
 import {
   setInputSelection,
   getInputSelection,
   isInputFocused,
-} from "./utils/input";
-import { isDOMElement } from "./utils/helpers";
+  type InputSelection,
+} from "./utils/input.ts";
+import { isDOMElement } from "./utils/helpers.ts";
 
-export function useInputElement(inputRef) {
+export function useInputElement(
+  inputRef: RefObject<HTMLElement>,
+): () => HTMLInputElement | null {
   return useCallback(() => {
     let input = inputRef.current;
     const isDOMNode = typeof window !== "undefined" && isDOMElement(input);
@@ -20,21 +29,21 @@ export function useInputElement(inputRef) {
     }
 
     if (input.nodeName !== "INPUT") {
-      input = input.querySelector("input");
+      const foundInput = input.querySelector("input");
+      if (!foundInput) {
+        throw new Error(
+          "react-input-mask: inputComponent doesn't contain input node",
+        );
+      }
+      input = foundInput;
     }
 
-    if (!input) {
-      throw new Error(
-        "react-input-mask: inputComponent doesn't contain input node",
-      );
-    }
-
-    return input;
+    return input as HTMLInputElement;
   }, [inputRef]);
 }
 
-function useDeferLoop(callback) {
-  const deferIdRef = useRef(null);
+function useDeferLoop(callback: () => void): [() => void, () => void] {
+  const deferIdRef = useRef<number | null>(null);
 
   const runLoop = useCallback(() => {
     // If there are simulated focus events, runLoop could be
@@ -52,8 +61,10 @@ function useDeferLoop(callback) {
   }, [callback]);
 
   const stopLoop = useCallback(() => {
-    cancelDefer(deferIdRef.current);
-    deferIdRef.current = null;
+    if (deferIdRef.current !== null) {
+      cancelDefer(deferIdRef.current);
+      deferIdRef.current = null;
+    }
   }, []);
 
   useEffect(() => {
@@ -63,24 +74,46 @@ function useDeferLoop(callback) {
     }
   }, [runLoop, stopLoop]);
 
-  useEffect(cancelDefer, []);
+  useEffect(
+    () => () => {
+      if (deferIdRef.current !== null) {
+        cancelDefer(deferIdRef.current);
+      }
+    },
+    [],
+  );
 
   return [runLoop, stopLoop];
 }
 
-function useSelection(inputRef, isMasked) {
-  const selectionRef = useRef({ start: null, end: null });
+interface SelectionHooks {
+  getSelection: () => InputSelection;
+  getLastSelection: () => InputSelection;
+  setSelection: (selection: InputSelection) => void;
+}
+
+function useSelection(
+  inputRef: RefObject<HTMLElement>,
+  isMasked: boolean,
+): SelectionHooks {
+  const selectionRef = useRef<InputSelection>({ start: 0, end: 0, length: 0 });
   const getInputElement = useInputElement(inputRef);
 
-  const getSelection = useCallback(() => {
+  const getSelection = useCallback((): InputSelection => {
     const input = getInputElement();
+    if (!input) {
+      return { start: 0, end: 0, length: 0 };
+    }
     return getInputSelection(input);
   }, [getInputElement]);
 
-  const getLastSelection = useCallback(() => selectionRef.current, []);
+  const getLastSelection = useCallback(
+    (): InputSelection => selectionRef.current,
+    [],
+  );
 
   const setSelection = useCallback(
-    (selection) => {
+    (selection: InputSelection): void => {
       const input = getInputElement();
 
       // Don't change selection on unfocused input
@@ -108,6 +141,10 @@ function useSelection(inputRef, isMasked) {
     }
 
     const input = getInputElement();
+    if (!input) {
+      return;
+    }
+
     input.addEventListener("focus", runSelectionLoop);
     input.addEventListener("blur", stopSelectionLoop);
 
@@ -118,7 +155,6 @@ function useSelection(inputRef, isMasked) {
     return () => {
       input.removeEventListener("focus", runSelectionLoop);
       input.removeEventListener("blur", stopSelectionLoop);
-
       stopSelectionLoop();
     };
   });
@@ -126,19 +162,28 @@ function useSelection(inputRef, isMasked) {
   return { getSelection, getLastSelection, setSelection };
 }
 
-function useValue(inputRef, initialValue) {
-  const getInputElement = useInputElement(inputRef);
-  const valueRef = useRef(initialValue);
+interface ValueHooks {
+  getValue: () => string;
+  getLastValue: () => string;
+  setValue: (newValue: string) => void;
+}
 
-  const getValue = useCallback(() => {
+function useValue(
+  inputRef: RefObject<HTMLElement>,
+  initialValue: string,
+): ValueHooks {
+  const getInputElement = useInputElement(inputRef);
+  const valueRef = useRef<string>(initialValue);
+
+  const getValue = useCallback((): string => {
     const input = getInputElement();
-    return input.value;
+    return input?.value || "";
   }, [getInputElement]);
 
-  const getLastValue = useCallback(() => valueRef.current, []);
+  const getLastValue = useCallback((): string => valueRef.current, []);
 
   const setValue = useCallback(
-    (newValue) => {
+    (newValue: string): void => {
       valueRef.current = newValue;
 
       const input = getInputElement();
@@ -156,29 +201,44 @@ function useValue(inputRef, initialValue) {
   };
 }
 
-export function useInputState(initialValue, isMasked) {
-  const inputRef = useRef();
+export interface InputState {
+  value: string;
+  selection: InputSelection;
+}
+
+export interface InputStateHooks {
+  inputRef: RefObject<HTMLElement>;
+  getInputState: () => InputState;
+  getLastInputState: () => InputState;
+  setInputState: (state: InputState) => void;
+}
+
+export function useInputState(
+  initialValue: string,
+  isMasked: boolean,
+): InputStateHooks {
+  const inputRef = useRef<HTMLElement>(null);
   const { getSelection, getLastSelection, setSelection } = useSelection(
     inputRef,
     isMasked,
   );
   const { getValue, getLastValue, setValue } = useValue(inputRef, initialValue);
 
-  function getLastInputState() {
+  function getLastInputState(): InputState {
     return {
       value: getLastValue(),
       selection: getLastSelection(),
     };
   }
 
-  function getInputState() {
+  function getInputState(): InputState {
     return {
       value: getValue(),
       selection: getSelection(),
     };
   }
 
-  function setInputState({ value, selection }) {
+  function setInputState({ value, selection }: InputState): void {
     setValue(value);
     setSelection(selection);
   }
@@ -191,8 +251,8 @@ export function useInputState(initialValue, isMasked) {
   };
 }
 
-export function usePrevious(value) {
-  const ref = useRef();
+export function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
   useEffect(() => {
     ref.current = value;
   });

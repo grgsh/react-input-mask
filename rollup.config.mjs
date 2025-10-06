@@ -3,12 +3,27 @@ import terser from "@rollup/plugin-terser";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import replace from "@rollup/plugin-replace";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import typescript from "@rollup/plugin-typescript";
 import protoToAssign from "./rollup.proto-to-assign.plugin.mjs";
 
-const input = "./src/index.js";
+const input = "./src/index.tsx";
 
 const external = ["react", "react-dom"];
-const plugins = [babel(), nodeResolve(), commonjs(), protoToAssign()];
+const plugins = [
+  typescript({
+    tsconfig: "./tsconfig.build.json",
+  }),
+  babel({
+    exclude: "node_modules/**",
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
+  }),
+  nodeResolve({
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
+  }),
+  commonjs(),
+  protoToAssign(),
+];
 const minifiedPlugins = [
   ...plugins,
   replace({
@@ -16,6 +31,8 @@ const minifiedPlugins = [
   }),
   babel({
     babelrc: false,
+    exclude: "node_modules/**",
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     plugins: [
       "babel-plugin-minify-dead-code-elimination",
       "babel-plugin-transform-react-remove-prop-types",
