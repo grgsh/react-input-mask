@@ -67,6 +67,7 @@ module.exports = (config) => {
         filename: "[name].js",
       },
       resolve: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
         modules: ["node_modules", "."],
       },
       module: require("./webpack.config").module,
