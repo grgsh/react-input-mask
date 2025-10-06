@@ -13,7 +13,8 @@ describe("CommonJS build", () => {
     rootDir,
     "lib/react-input-mask.production.min.js",
   );
-  const InputElement = require(libPath).default;
+  const lib = require(libPath);
+  const InputElement = lib.default || lib;
 
   it("should return a string", () => {
     const result = ReactDOMServer.renderToString(
@@ -25,7 +26,8 @@ describe("CommonJS build", () => {
 
 describe("UMD build", () => {
   const libPath = path.resolve(rootDir, "dist/react-input-mask.min.js");
-  const InputElement = require(libPath).default;
+  const lib = require(libPath);
+  const InputElement = lib.default || lib;
 
   it("should return a string", () => {
     const result = ReactDOMServer.renderToString(

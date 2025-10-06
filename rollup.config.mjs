@@ -89,4 +89,19 @@ export default [
     external,
     plugins: minifiedPlugins,
   },
+
+  // ES Module builds for modern bundlers
+  {
+    input,
+    output: { file: "lib/react-input-mask.esm.js", format: "es" },
+    external,
+    plugins,
+  },
+
+  {
+    input,
+    output: { file: "lib/react-input-mask.esm.min.js", format: "es" },
+    external,
+    plugins: minifiedPlugins,
+  },
 ];

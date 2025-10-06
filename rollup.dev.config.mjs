@@ -25,14 +25,24 @@ const plugins = [
 ];
 
 // Development-only build configuration for faster watch mode
-export default {
-  input,
-  output: { file: "lib/react-input-mask.development.js", format: "cjs" },
-  external,
-  plugins: [
-    ...plugins,
-    replace({
-      "process.env.NODE_ENV": '"development"',
-    }),
-  ],
-};
+export default [
+  {
+    input,
+    output: { file: "lib/react-input-mask.development.js", format: "cjs" },
+    external,
+    plugins: [
+      ...plugins,
+      replace({
+        "process.env.NODE_ENV": '"development"',
+      }),
+    ],
+  },
+
+  // ES Module builds for modern bundlers
+  {
+    input,
+    output: { file: "lib/react-input-mask.esm.js", format: "es" },
+    external,
+    plugins,
+  },
+];
