@@ -6,14 +6,14 @@ import {
   RefObject,
 } from "react";
 
-import { defer, cancelDefer } from "./utils/defer.ts";
+import { defer, cancelDefer } from "./utils/defer";
 import {
   setInputSelection,
   getInputSelection,
   isInputFocused,
   type InputSelection,
-} from "./utils/input.ts";
-import { isDOMElement } from "./utils/helpers.ts";
+} from "./utils/input";
+import { isDOMElement } from "./utils/helpers";
 
 export function useInputElement(
   inputRef: RefObject<HTMLElement>,

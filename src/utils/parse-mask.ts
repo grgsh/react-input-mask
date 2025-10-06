@@ -1,4 +1,4 @@
-import { defaultFormatChars } from "../constants.ts";
+import { defaultFormatChars } from "../constants";
 
 export type MaskChar = string | RegExp;
 export type Mask = string | Array<MaskChar>;

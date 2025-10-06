@@ -63,6 +63,14 @@ module.exports = {
       },
       plugins: ["@typescript-eslint"],
       extends: ["airbnb", "prettier"],
+      settings: {
+        "import/resolver": {
+          typescript: true,
+          node: {
+            extensions: [".js", ".jsx", ".ts", ".tsx"],
+          },
+        },
+      },
       rules: {
         // TypeScript specific rules
         "@typescript-eslint/no-explicit-any": OFF,
@@ -88,8 +96,8 @@ module.exports = {
           {
             js: "never",
             jsx: "never",
-            ts: "always",
-            tsx: "always",
+            ts: "never",
+            tsx: "never",
           },
         ],
       },

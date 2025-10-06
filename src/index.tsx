@@ -13,18 +13,18 @@ import {
   useInputElement,
   usePrevious,
   type InputState,
-} from "./hooks.ts";
+} from "./hooks";
 import {
   validateMaxLength,
   validateChildren,
   validateMaskPlaceholder,
-} from "./validate-props.ts";
+} from "./validate-props";
 
-import { defer } from "./utils/defer.ts";
-import { isInputFocused, type InputSelection } from "./utils/input.ts";
-import { isFunction, toString, getElementDocument } from "./utils/helpers.ts";
-import MaskUtils from "./utils/mask.ts";
-import { type Mask } from "./utils/parse-mask.ts";
+import { defer } from "./utils/defer";
+import { isInputFocused, type InputSelection } from "./utils/input";
+import { isFunction, toString, getElementDocument } from "./utils/helpers";
+import MaskUtils from "./utils/mask";
+import { type Mask } from "./utils/parse-mask";
 
 export interface BeforeMaskedStateChangeStates {
   currentState?: InputState;

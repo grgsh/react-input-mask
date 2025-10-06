@@ -1,7 +1,7 @@
 /* eslint no-use-before-define: ["error", { functions: false }] */
-import { findLastIndex, repeat } from "./helpers.ts";
-import parseMask, { type ParsedMask, type Mask } from "./parse-mask.ts";
-import { type InputSelection } from "./input.ts";
+import { findLastIndex, repeat } from "./helpers";
+import parseMask, { type ParsedMask, type Mask } from "./parse-mask";
+import { type InputSelection } from "./input";
 
 export interface MaskOptions {
   mask?: Mask;

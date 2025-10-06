@@ -2,8 +2,8 @@ import invariant from "invariant";
 import warning from "warning";
 import { ReactElement } from "react";
 
-import { CONTROLLED_PROPS } from "./constants.ts";
-import { type Mask } from "./utils/parse-mask.ts";
+import { CONTROLLED_PROPS } from "./constants";
+import { type Mask } from "./utils/parse-mask";
 
 export interface PropsWithMask {
   mask?: Mask;
