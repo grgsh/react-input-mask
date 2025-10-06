@@ -7,11 +7,6 @@ import protoToAssign from "./rollup.proto-to-assign.plugin.mjs";
 
 const input = "./src/index.js";
 
-// Treat as externals all not relative and not absolute paths
-// e.g. 'react' to prevent duplications in user bundle.
-const isExternal = (id) =>
-  !id.startsWith("\0") && !id.startsWith(".") && !id.startsWith("/");
-
 const external = ["react", "react-dom"];
 const plugins = [babel(), nodeResolve(), commonjs(), protoToAssign()];
 const minifiedPlugins = [
@@ -64,14 +59,14 @@ export default [
   {
     input,
     output: { file: "lib/react-input-mask.development.js", format: "cjs" },
-    external: isExternal,
+    external,
     plugins,
   },
 
   {
     input,
     output: { file: "lib/react-input-mask.production.min.js", format: "cjs" },
-    external: isExternal,
+    external,
     plugins: minifiedPlugins,
   },
 ];

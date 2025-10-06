@@ -31,6 +31,16 @@
   ],
   "env": {
     "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": "commonjs",
+            "loose": true
+          }
+        ],
+        "@babel/preset-react"
+      ],
       "plugins": [
         "@babel/plugin-transform-proto-to-assign",
         "@babel/transform-modules-commonjs"
