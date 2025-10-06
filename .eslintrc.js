@@ -81,6 +81,8 @@ module.exports = {
 
         // Disable conflicting rules
         "react/prop-types": OFF, // TypeScript handles this
+        "react/no-unused-prop-types": OFF, // TypeScript interfaces are not prop types
+        "react/require-default-props": OFF, // TypeScript handles optional props
         "no-undef": OFF, // TypeScript handles this
         "react/jsx-filename-extension": OFF, // Allow JSX in .tsx files
         "react/jsx-props-no-spreading": OFF, // Allow prop spreading
