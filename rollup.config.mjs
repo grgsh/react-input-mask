@@ -39,7 +39,10 @@ const minifiedPlugins = [
     ],
   }),
   terser({
-    compress: { warnings: false },
+    compress: {
+      warnings: false,
+      drop_console: false, // Preserve console.log statements
+    },
   }),
 ];
 

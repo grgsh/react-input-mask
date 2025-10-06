@@ -20,6 +20,7 @@ module.exports = {
     "react/prop-types": [ERROR, { ignore: ["value", "defaultValue"] }],
     "react-hooks/rules-of-hooks": ERROR,
     "react-hooks/exhaustive-deps": ERROR,
+    "no-console": OFF, // Allow console statements for debugging
     "no-shadow": OFF,
     "no-param-reassign": OFF,
     "no-plusplus": OFF,
@@ -80,6 +81,7 @@ module.exports = {
         "no-unused-vars": OFF,
 
         // Disable conflicting rules
+        "no-console": OFF, // Allow console statements for debugging
         "react/prop-types": OFF, // TypeScript handles this
         "react/no-unused-prop-types": OFF, // TypeScript interfaces are not prop types
         "react/require-default-props": OFF, // TypeScript handles optional props

@@ -93,6 +93,8 @@
   "scripts": {
     "clean": "rimraf lib dist",
     "build": "cross-env BABEL_ENV=rollup rollup -c",
+    "watch": "cross-env BABEL_ENV=rollup rollup -c --watch",
+    "watch:dev": "cross-env BABEL_ENV=rollup rollup -c rollup.dev.config.mjs --watch",
     "start": "cross-env BABEL_ENV=test NODE_ENV=development webpack-dev-server",
     "prepare": "husky && npm run lint && npm test && npm run clean && npm run types && npm run build",
     "lint": "eslint ./src/**/*.{js,ts,tsx} ./tests/**/*.{js,ts,tsx} ./*.{js,ts,tsx}",
