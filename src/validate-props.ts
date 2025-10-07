@@ -40,8 +40,8 @@ export function validateChildren(
 ): void {
   const conflictProps = CONTROLLED_PROPS.filter(
     (propId) =>
-      inputElement.props[propId] != null &&
-      inputElement.props[propId] !== props[propId],
+      inputElement?.props?.[propId] != null &&
+      inputElement?.props?.[propId] !== props[propId],
   );
 
   invariant(
