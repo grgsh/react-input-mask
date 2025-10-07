@@ -36,7 +36,7 @@ export function validateMaskPlaceholder(props: PropsWithMask): void {
 
 export function validateChildren(
   props: PropsWithMask,
-  inputElement: ReactElement,
+  inputElement: ReactElement<React.InputHTMLAttributes<HTMLInputElement>>,
 ): void {
   const conflictProps = CONTROLLED_PROPS.filter(
     (propId) =>
