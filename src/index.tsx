@@ -69,7 +69,9 @@ export type Props = Omit<
   beforeMaskedStateChange?(states: BeforeMaskedStateChangeStates): InputState;
 
   children?: React.ReactElement; // | ((inputProps: any) => React.ReactNode);
-  render?: (inputProps: any) => React.ReactElement;
+  render?: (
+    inputProps: React.InputHTMLAttributes<HTMLInputElement>,
+  ) => React.ReactElement;
 };
 
 // Legacy interface name for backward compatibility
