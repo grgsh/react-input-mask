@@ -5,26 +5,21 @@ import React, {
   MouseEvent,
   ChangeEvent,
 } from "react";
-
 import {
   useInputState,
   useInputElement,
   usePrevious,
   type InputState,
 } from "./hooks";
-
 import {
   validateMaxLength,
   //   validateChildren,
   validateMaskPlaceholder,
+  validateChildren,
 } from "./validate-props";
-
 import { defer } from "./utils/defer";
-
 import { isInputFocused, type InputSelection } from "./utils/input";
-
 import { isFunction, toString, getElementDocument } from "./utils/helpers";
-
 import MaskUtils from "./utils/mask";
 
 export type Selection = InputSelection;
@@ -73,74 +68,61 @@ export type Props = Omit<
    */
   beforeMaskedStateChange?(states: BeforeMaskedStateChangeStates): InputState;
 
-  children?: React.ReactElement | ((inputProps: any) => React.ReactNode);
+  children?: React.ReactElement; // | ((inputProps: any) => React.ReactNode);
+  render?: (inputProps: any) => React.ReactElement;
 };
 
 // Legacy interface name for backward compatibility
 export interface InputMaskProps extends Props {}
 
-console.log("hello world");
 // eslint-disable-next-line prefer-arrow-callback
 const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
   const {
     alwaysShowMask = false,
     children,
+    render,
     mask,
     maskPlaceholder = "_",
     beforeMaskedStateChange,
     ...restProps
   } = props;
 
-  console.log("🚀 NEXT.JS TEST - Change detected!", {
+  console.log("🚀 Change detected!", {
     props,
     timestamp: new Date().toISOString(),
   });
 
   validateMaxLength(props);
-
   validateMaskPlaceholder(props);
 
   const maskUtils = new MaskUtils({ mask, maskPlaceholder });
 
   const isMasked = !!mask;
-
   const isEditable = !restProps.disabled && !restProps.readOnly;
-
   const isControlled = props.value !== null && props.value !== undefined;
-
   const previousIsMasked = usePrevious(isMasked);
-
   const initialValue = toString(
     (isControlled ? props.value : props.defaultValue) || "",
   );
 
   const { inputRef, getInputState, setInputState, getLastInputState } =
     useInputState(initialValue, isMasked);
-
   const getInputElement = useInputElement(inputRef);
 
   function onChange(event: ChangeEvent<HTMLInputElement>): void {
     const currentState = getInputState();
-
     const previousState = getLastInputState();
-
-    let newInputState = maskUtils.processChange(currentState, previousState);
+    let newInputState: InputState = maskUtils.processChange(
+      currentState,
+      previousState,
+    );
 
     if (beforeMaskedStateChange) {
-      const convertedState: InputState = {
-        value: newInputState.value,
-        selection: newInputState.selection,
-      };
-
-      const resultState = beforeMaskedStateChange({
-        nextState: convertedState,
+      newInputState = beforeMaskedStateChange({
+        currentState,
+        previousState,
+        nextState: newInputState,
       });
-
-      newInputState = {
-        ...newInputState,
-        value: resultState.value,
-        selection: resultState.selection,
-      };
     }
 
     setInputState(newInputState);
@@ -152,31 +134,24 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 
   function onFocus(event: FocusEvent<HTMLInputElement>): void {
     // If autoFocus property is set, focus event fires before the ref handler gets called
-
     (inputRef as any).current = event.target as HTMLElement;
 
     const currentValue = getInputState().value;
 
     if (isMasked && !maskUtils.isValueFilled(currentValue)) {
       let newValue = maskUtils.formatValue(currentValue);
-
       let newSelection = maskUtils.getDefaultSelectionForValue(newValue);
-
       let newInputState: InputState = {
         value: newValue,
-
         selection: newSelection,
       };
 
       if (beforeMaskedStateChange) {
         newInputState = beforeMaskedStateChange({
           currentState: getInputState(),
-
           nextState: newInputState,
         });
-
         newValue = newInputState.value;
-
         newSelection = newInputState.selection || {
           start: 0,
           end: 0,
@@ -191,9 +166,7 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
       }
 
       // Chrome resets selection after focus event,
-
       // so we want to restore it later
-
       defer(() => {
         setInputState(getLastInputState());
       });
@@ -206,25 +179,20 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 
   function onBlur(event: FocusEvent<HTMLInputElement>): void {
     const currentValue = getInputState().value;
-
     const lastValue = getLastInputState().value;
 
     if (isMasked && !alwaysShowMask && maskUtils.isValueEmpty(lastValue)) {
       let newValue = "";
-
       let newInputState: InputState = {
         value: newValue,
-
-        selection: { start: 0, end: 0, length: 0 },
+        selection: { start: 0, end: 0, length: 0 }, // TODO: Check this - originally this was {start: null, end: null}
       };
 
       if (beforeMaskedStateChange) {
         newInputState = beforeMaskedStateChange({
           currentState: getInputState(),
-
           nextState: newInputState,
         });
-
         newValue = newInputState.value;
       }
 
@@ -241,29 +209,18 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
   }
 
   // Tiny unintentional mouse movements can break cursor
-
   // position on focus, so we have to restore it in that case
-
   //
-
   // https://github.com/sanniassin/react-input-mask/issues/108
-
   function onMouseDown(event: MouseEvent<HTMLInputElement>): void {
     const input = getInputElement();
-
-    if (!input) {
-      return;
-    }
-
+    if (!input) return; // TODO: Check - originally this check wasn't here
     const { value } = getInputState();
-
     const inputDocument = getElementDocument(input);
 
     if (!isInputFocused(input) && !maskUtils.isValueFilled(value)) {
       const mouseDownX = event.clientX;
-
       const mouseDownY = event.clientY;
-
       const mouseDownTime = new Date().getTime();
 
       const mouseUpHandler = (mouseUpEvent: Event): void => {
@@ -274,11 +231,8 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
         }
 
         const deltaX = Math.abs((mouseUpEvent as any).clientX - mouseDownX);
-
         const deltaY = Math.abs((mouseUpEvent as any).clientY - mouseDownY);
-
         const axisDelta = Math.max(deltaX, deltaY);
-
         const timeDelta = new Date().getTime() - mouseDownTime;
 
         if (
@@ -286,17 +240,13 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
           (axisDelta <= 5 && timeDelta <= 300)
         ) {
           const lastState = getLastInputState();
-
           const newSelection = maskUtils.getDefaultSelectionForValue(
             lastState.value,
           );
-
           const newState: InputState = {
             ...lastState,
-
             selection: newSelection,
           };
-
           setInputState(newState);
         }
       };
@@ -310,14 +260,10 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
   }
 
   // For controlled inputs we want to provide properly formatted
-
   // value prop
-
   if (isMasked && isControlled) {
     const input = getInputElement();
-
     const isFocused = input && isInputFocused(input);
-
     let newValue =
       isFocused || alwaysShowMask || props.value
         ? maskUtils.formatValue(toString(props.value || ""))
@@ -334,49 +280,32 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 
     setInputState({
       ...getLastInputState(),
-
       value: toString(newValue),
     });
   }
 
   const lastState = getLastInputState();
-
   const lastSelection = lastState.selection;
-
   const lastValue = lastState.value;
 
   useLayoutEffect(() => {
-    if (!isMasked) {
-      return;
-    }
+    if (!isMasked) return;
 
     const input = getInputElement();
-
-    if (!input) {
-      return;
-    }
+    if (!input) return;
 
     const isFocused = isInputFocused(input);
-
     const previousSelection = lastSelection;
-
     const currentState = getInputState();
-
     let newInputState: InputState = { ...currentState };
 
     // Update value for uncontrolled inputs to make sure
-
     // it's always in sync with mask props
-
     if (!isControlled) {
       const currentValue = currentState.value;
-
       const formattedValue = maskUtils.formatValue(currentValue);
-
       const isValueEmpty = maskUtils.isValueEmpty(formattedValue);
-
       const shouldFormatValue = !isValueEmpty || isFocused || alwaysShowMask;
-
       if (shouldFormatValue) {
         newInputState.value = formattedValue;
       } else if (isValueEmpty && !isFocused) {
@@ -386,13 +315,11 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 
     if (isFocused && !previousIsMasked) {
       // Adjust selection if input got masked while being focused
-
       newInputState.selection = maskUtils.getDefaultSelectionForValue(
         newInputState.value,
       );
     } else if (isControlled && isFocused && previousSelection) {
       // Restore cursor position if value has changed outside change event
-
       if (previousSelection.start !== null && previousSelection.end !== null) {
         newInputState.selection = previousSelection;
       }
@@ -401,7 +328,6 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
     if (beforeMaskedStateChange) {
       newInputState = beforeMaskedStateChange({
         currentState,
-
         nextState: newInputState,
       });
     }
@@ -425,31 +351,23 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 
   const inputProps = {
     ...restProps,
-
     onFocus,
-
     onBlur,
-
     onChange: isMasked && isEditable ? onChange : props.onChange,
-
     onMouseDown: isMasked && isEditable ? onMouseDown : props.onMouseDown,
-
     value: isMasked && isControlled ? lastValue : props.value,
   };
 
   if (children) {
-    if (children && typeof children !== "function") {
-      //   validateChildren(props, children);
-    }
+    validateChildren(props, children);
 
     // {@link https://stackoverflow.com/q/63149840/327074}
-
-    if (children) {
-      if (typeof children === "function") {
-        return children(inputProps);
-      }
-      return React.cloneElement(children, { ...inputProps, ref: refCallback });
-    }
+    const onlyChild = React.Children.only(children);
+    return React.cloneElement(onlyChild, { ...inputProps, ref: refCallback });
+  }
+  if (render) {
+    const element = render(inputProps);
+    return React.cloneElement(element, { ...inputProps, ref: refCallback });
   }
 
   return <input ref={refCallback} {...inputProps} />;
