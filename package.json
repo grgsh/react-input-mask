@@ -40,8 +40,8 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/invariant": "^2.2.37",
-    "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25",
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.8",
     "@types/warning": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
     "@typescript-eslint/parser": "^8.45.0",
@@ -71,8 +71,8 @@
     "mocha": "^10.3.0",
     "prettier": "^3.2.5",
     "puppeteer": "^22.3.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "rimraf": "^5.0.5",
     "rollup": "^4.12.0",
     "typescript": "^5.3.3",
@@ -81,7 +81,7 @@
     "webpack-dev-server": "^5.0.2"
   },
   "main": "index.js",
-"module": "lib/react-input-mask.esm.js",
+  "module": "lib/react-input-mask.esm.js",
   "exports": {
     ".": {
       "import": "./lib/react-input-mask.esm.js",
