@@ -16,7 +16,7 @@ import {
 import { isDOMElement } from "./utils/helpers";
 
 export function useInputElement(
-  inputRef: RefObject<HTMLElement>,
+  inputRef: RefObject<HTMLElement | null>,
 ): () => HTMLInputElement | null {
   return useCallback(() => {
     let input = inputRef.current;
@@ -93,7 +93,7 @@ interface SelectionHooks {
 }
 
 function useSelection(
-  inputRef: RefObject<HTMLElement>,
+  inputRef: RefObject<HTMLElement | null>,
   isMasked: boolean,
 ): SelectionHooks {
   const selectionRef = useRef<InputSelection>({ start: 0, end: 0, length: 0 });
@@ -169,7 +169,7 @@ interface ValueHooks {
 }
 
 function useValue(
-  inputRef: RefObject<HTMLElement>,
+  inputRef: RefObject<HTMLElement | null>,
   initialValue: string,
 ): ValueHooks {
   const getInputElement = useInputElement(inputRef);
@@ -207,7 +207,7 @@ export interface InputState {
 }
 
 export interface InputStateHooks {
-  inputRef: RefObject<HTMLElement>;
+  inputRef: RefObject<HTMLElement | null>;
   getInputState: () => InputState;
   getLastInputState: () => InputState;
   setInputState: (state: InputState) => void;
@@ -252,7 +252,7 @@ export function useInputState(
 }
 
 export function usePrevious<T>(value: T): T | undefined {
-  const ref = useRef<T>();
+  const ref = useRef<T>(value);
   useEffect(() => {
     ref.current = value;
   });
