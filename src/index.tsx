@@ -21,6 +21,7 @@ import { defer } from "./utils/defer";
 import { isInputFocused, type InputSelection } from "./utils/input";
 import { isFunction, toString, getElementDocument } from "./utils/helpers";
 import MaskUtils from "./utils/mask";
+import { ForwardedChild } from "./forward-ref-wrapper";
 
 export type Selection = InputSelection;
 
@@ -68,7 +69,7 @@ export type Props = Omit<
    */
   beforeMaskedStateChange?(states: BeforeMaskedStateChangeStates): InputState;
 
-  children?: React.ReactElement; // | ((inputProps: any) => React.ReactNode);
+  children?: React.ReactElement<React.InputHTMLAttributes<HTMLInputElement>>; // | ((inputProps: any) => React.ReactNode);
   render?: (
     inputProps: React.InputHTMLAttributes<HTMLInputElement>,
   ) => React.ReactElement;
@@ -365,11 +366,15 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 
     // {@link https://stackoverflow.com/q/63149840/327074}
     const onlyChild = React.Children.only(children);
-    return React.cloneElement(onlyChild, { ...inputProps, ref: refCallback });
+    return (
+      <ForwardedChild element={onlyChild} {...inputProps} ref={refCallback} />
+    );
   }
   if (render) {
     const element = render(inputProps);
-    return React.cloneElement(element, { ...inputProps, ref: refCallback });
+    return (
+      <ForwardedChild element={element} {...inputProps} ref={refCallback} />
+    );
   }
 
   return <input ref={refCallback} {...inputProps} />;
