@@ -346,9 +346,7 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
     if (isFunction(forwardedRef)) {
       (forwardedRef as (instance: HTMLInputElement | null) => void)(node);
     } else if (forwardedRef !== null && typeof forwardedRef === "object") {
-      (
-        forwardedRef as React.MutableRefObject<HTMLInputElement | null>
-      ).current = node;
+      (forwardedRef as React.RefObject<HTMLInputElement | null>).current = node;
     }
   };
 
