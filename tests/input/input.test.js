@@ -1,16 +1,17 @@
 /* eslint-disable no-nonoctal-decimal-escape */
-/* global describe, it, afterEach */
+/* global describe, it, afterEach, beforeEach */
 
 import React from "react";
-import ReactDOM from "react-dom";
 import TestUtils from "react-dom/test-utils";
 import { expect } from "chai"; // eslint-disable-line import/no-extraneous-dependencies
+import { createRoot } from "react-dom/client";
 import * as deferUtils from "../../src/utils/defer";
 import Input from "../../src/index";
 import { getInputSelection } from "../../src/utils/input";
 
 document.body.innerHTML = '<div id="container"></div>';
 const container = document.getElementById("container");
+let root = createRoot(container);
 
 async function delay(duration) {
   await new Promise((resolve) => {
@@ -73,10 +74,10 @@ function createInput(component) {
       ...newProps,
     };
 
-    ReactDOM.render(React.createElement(Input, props), container);
+    root.render(React.createElement(Input, props));
   }
 
-  ReactDOM.render(component, container);
+  root.render(component);
 
   return { input, setProps };
 }
@@ -168,8 +169,12 @@ const FunctionalInputComponent = React.forwardRef((props, ref) => (
 ));
 
 describe("react-input-mask", () => {
+  beforeEach(() => {
+    root = createRoot(container);
+  });
+
   afterEach(() => {
-    ReactDOM.unmountComponentAtNode(container);
+    root.unmount();
   });
 
   it("should format value on mount", async () => {
