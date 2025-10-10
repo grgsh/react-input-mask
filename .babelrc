@@ -1,53 +1,53 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "modules": false,
-        "loose": true
-      }
-    ],
-    "@babel/preset-react"
-  ],
-  "plugins": [
-    [
-      "@babel/plugin-proposal-class-properties",
-      {
-        "loose": true
-      }
-    ],
-    [
-      "@babel/plugin-proposal-private-property-in-object",
-      {
-        "loose": true
-      }
-    ],
-    [
-      "@babel/plugin-proposal-private-methods",
-      {
-        "loose": true
-      }
-    ]
-  ],
-  "env": {
-    "test": {
-      "presets": [
-        [
-          "@babel/preset-env",
-          {
-            "modules": "commonjs",
-            "loose": true
-          }
-        ],
-        "@babel/preset-react"
-      ],
-      "plugins": [
-        "@babel/plugin-transform-proto-to-assign",
-        "@babel/transform-modules-commonjs"
-      ]
-    },
-    "rollup": {
-      "plugins": ["babel-plugin-dev-expression"]
-    }
-  }
+	"presets": [
+		[
+			"@babel/preset-env",
+			{
+				"modules": false,
+				"loose": true
+			}
+		],
+		"@babel/preset-react"
+	],
+	"plugins": [
+		[
+			"@babel/plugin-proposal-class-properties",
+			{
+				"loose": true
+			}
+		],
+		[
+			"@babel/plugin-proposal-private-property-in-object",
+			{
+				"loose": true
+			}
+		],
+		[
+			"@babel/plugin-proposal-private-methods",
+			{
+				"loose": true
+			}
+		]
+	],
+	"env": {
+		"test": {
+			"presets": [
+				[
+					"@babel/preset-env",
+					{
+						"modules": "commonjs",
+						"loose": true
+					}
+				],
+				"@babel/preset-react"
+			],
+			"plugins": [
+				"@babel/plugin-transform-proto-to-assign",
+				"@babel/transform-modules-commonjs"
+			]
+		},
+		"rollup": {
+			"plugins": ["babel-plugin-dev-expression"]
+		}
+	}
 }

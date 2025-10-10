@@ -28,17 +28,17 @@ react-input-mask v3 requires **React 16.8.0 or later.** If you need support for 
 # Usage
 
 ```jsx
-import React from "react";
-import InputMask from "@mona-health/react-input-mask";
+import React from 'react';
+import InputMask from '@mona-health/react-input-mask';
 
 function DateInput(props) {
-  return (
-    <InputMask
-      mask="99/99/9999"
-      onChange={props.onChange}
-      value={props.value}
-    />
-  );
+	return (
+		<InputMask
+			mask="99/99/9999"
+			onChange={props.onChange}
+			value={props.value}
+		/>
+	);
 }
 ```
 
@@ -77,7 +77,7 @@ More complex masks can be defined as an array of regular expressions and constan
 const firstLetter = /(?!.*[DFIOQU])[A-VXY]/i;
 const letter = /(?!.*[DFIOQU])[A-Z]/i;
 const digit = /[0-9]/;
-const mask = [firstLetter, digit, letter, " ", digit, letter, digit];
+const mask = [firstLetter, digit, letter, ' ', digit, letter, digit];
 return <InputMask mask={mask} />;
 ```
 
@@ -117,23 +117,23 @@ Selection positions will be `null` if input isn't focused and during rendering.
 ```jsx
 // Trim trailing slashes
 function beforeMaskedStateChange({ nextState }) {
-  let { value } = nextState;
-  if (value.endsWith("/")) {
-    value = value.slice(0, -1);
-  }
+	let { value } = nextState;
+	if (value.endsWith('/')) {
+		value = value.slice(0, -1);
+	}
 
-  return {
-    ...nextState,
-    value,
-  };
+	return {
+		...nextState,
+		value
+	};
 }
 
 return (
-  <InputMask
-    mask="99/99/99"
-    maskPlaceholder={null}
-    beforeMaskedStateChange={beforeMaskedStateChange}
-  />
+	<InputMask
+		mask="99/99/99"
+		maskPlaceholder={null}
+		beforeMaskedStateChange={beforeMaskedStateChange}
+	/>
 );
 ```
 
@@ -144,26 +144,34 @@ Please note that `beforeMaskedStateChange` executes more often than `onChange` a
 To use another component instead of regular `<input />` provide it as children. The following properties, if used, should always be defined on the `InputMask` component itself: `onChange`, `onMouseDown`, `onFocus`, `onBlur`, `value`, `disabled`, `readOnly`.
 
 ```jsx
-import React from "react";
-import InputMask from "@mona-health/react-input-mask";
-import MaterialInput from "@material-ui/core/Input";
+import React from 'react';
+import InputMask from '@mona-health/react-input-mask';
+import MaterialInput from '@material-ui/core/Input';
 
 // Will work fine
 function Input(props) {
-  return (
-    <InputMask mask="99/99/9999" value={props.value} onChange={props.onChange}>
-      <MaterialInput type="tel" disableUnderline />
-    </InputMask>
-  );
+	return (
+		<InputMask
+			mask="99/99/9999"
+			value={props.value}
+			onChange={props.onChange}
+		>
+			<MaterialInput type="tel" disableUnderline />
+		</InputMask>
+	);
 }
 
 // Will throw an error because InputMask's and children's onChange props aren't the same
 function InvalidInput(props) {
-  return (
-    <InputMask mask="99/99/9999" value={props.value}>
-      <MaterialInput type="tel" disableUnderline onChange={props.onChange} />
-    </InputMask>
-  );
+	return (
+		<InputMask mask="99/99/9999" value={props.value}>
+			<MaterialInput
+				type="tel"
+				disableUnderline
+				onChange={props.onChange}
+			/>
+		</InputMask>
+	);
 }
 ```
 
@@ -171,30 +179,30 @@ function InvalidInput(props) {
 
 1. a function component that implments `React.forwardRef`
 
-   ```jsx
-   const FunctionalInputComponent = React.forwardRef((props, ref) => {
-     return <input ref={ref} {...props} />;
-   });
-   ```
+    ```jsx
+    const FunctionalInputComponent = React.forwardRef((props, ref) => {
+    	return <input ref={ref} {...props} />;
+    });
+    ```
 
 2. a class component that is wrapped in a function component that implements `React.forwardRef` (`innerRef` can be called anything as long as it's not `ref`)
 
-   ```jsx
-   class InnerClassInputComponent extends React.Component {
-     render() {
-       const { innerRef, ...restProps } = this.props;
-       return (
-         <div>
-           <input ref={innerRef} {...restProps} />
-         </div>
-       );
-     }
-   }
+    ```jsx
+    class InnerClassInputComponent extends React.Component {
+    	render() {
+    		const { innerRef, ...restProps } = this.props;
+    		return (
+    			<div>
+    				<input ref={innerRef} {...restProps} />
+    			</div>
+    		);
+    	}
+    }
 
-   const ClassInputComponent = React.forwardRef((props, ref) => {
-     return <InnerClassInputComponent innerRef={ref} {...props} />;
-   });
-   ```
+    const ClassInputComponent = React.forwardRef((props, ref) => {
+    	return <InnerClassInputComponent innerRef={ref} {...props} />;
+    });
+    ```
 
 For more information see the [Material UI Composition guide - caveat with Refs](https://mui.com/material-ui/guides/composition/#caveat-with-refs).
 
@@ -215,7 +223,7 @@ Please note that it might lead to worse user experience (should I enter +1 if in
 The following sequence could fail
 
 ```js
-cy.get("input").focus().type("12345").should("have.value", "12/34/5___"); // expected <input> to have value 12/34/5___, but the value was 23/45/____
+cy.get('input').focus().type('12345').should('have.value', '12/34/5___'); // expected <input> to have value 12/34/5___, but the value was 23/45/____
 ```
 
 Since [focus is not an action command](https://docs.cypress.io/api/commands/focus.html#Focus-is-not-an-action-command), it behaves differently than the real user interaction and, therefore, less reliable.
@@ -225,17 +233,17 @@ There is a few possible workarounds
 ```js
 // Start typing without calling focus() explicitly.
 // type() is an action command and focuses input anyway
-cy.get("input").type("12345").should("have.value", "12/34/5___");
+cy.get('input').type('12345').should('have.value', '12/34/5___');
 
 // Use click() instead of focus()
-cy.get("input").click().type("12345").should("have.value", "12/34/5___");
+cy.get('input').click().type('12345').should('have.value', '12/34/5___');
 
 // Or wait a little after focus()
-cy.get("input")
-  .focus()
-  .wait(50)
-  .type("12345")
-  .should("have.value", "12/34/5___");
+cy.get('input')
+	.focus()
+	.wait(50)
+	.type('12345')
+	.should('have.value', '12/34/5___');
 ```
 
 # Building

@@ -1,0 +1,14 @@
+{
+	"semi": true,
+	"trailingComma": "none",
+	"singleQuote": true,
+	"arrowParens": "avoid",
+	"overrides": [
+		{
+			"files": "*.svg",
+			"options": {
+				"parser": "html"
+			}
+		}
+	]
+}
