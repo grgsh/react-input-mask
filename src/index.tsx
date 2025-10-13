@@ -74,11 +74,6 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 		...restProps
 	} = props;
 
-	console.log('🚀 Change detected!', {
-		props,
-		timestamp: new Date().toISOString()
-	});
-
 	validateMaxLength(props);
 	validateMaskPlaceholder(props);
 
