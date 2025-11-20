@@ -1,0 +1,15 @@
+# Build outputs
+lib/
+dist/
+
+# Dependencies
+node_modules/
+
+# Coverage reports
+coverage/
+
+# Package lock file (generated)
+package-lock.json
+
+# Size snapshot (generated)
+.size-snapshot.json
