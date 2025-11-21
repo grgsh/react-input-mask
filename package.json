@@ -111,8 +111,8 @@
     "lint-fix": "eslint --fix ./src/**/*.{js,ts,tsx} ./tests/**/*.{js,ts,tsx} ./*.{js,ts,tsx}",
     "test": "npm run build && npm run test:input && npm run test:server-render && npm run test:build",
     "test:input": "cross-env NODE_ENV=test BABEL_ENV=test karma start",
-    "test:server-render": "cross-env BABEL_ENV=test mocha --require @babel/register ./tests/server-render",
-    "test:build": "cross-env BABEL_ENV=test mocha --require @babel/register ./tests/build",
+    "test:server-render": "cross-env BABEL_ENV=test mocha --require @babel/register --extension jsx ./tests/server-render",
+    "test:build": "cross-env BABEL_ENV=test mocha --require @babel/register --extension jsx ./tests/build",
     "types": "tsc"
   },
   "repository": {

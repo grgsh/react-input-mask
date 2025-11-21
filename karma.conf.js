@@ -24,7 +24,7 @@ module.exports = config => {
 			'node_modules/core-js/client/shim.min.js',
 			'node_modules/regenerator-runtime/runtime.js',
 			'node_modules/console-polyfill/index.js',
-			'tests/input/*.js'
+			'tests/input/*.jsx'
 		],
 
 		// list of files to exclude
@@ -32,7 +32,7 @@ module.exports = config => {
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-		preprocessors: { 'tests/input/*.js': ['webpack'] },
+		preprocessors: { 'tests/input/*.jsx': ['webpack'] },
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress'

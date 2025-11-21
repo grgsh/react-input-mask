@@ -9,17 +9,12 @@ import { expect } from 'chai'; // eslint-disable-line import/no-extraneous-depen
 const rootDir = path.resolve(__dirname, '../..');
 
 describe('CommonJS build', () => {
-	const libPath = path.resolve(
-		rootDir,
-		'lib/react-input-mask.production.min.js'
-	);
+	const libPath = path.resolve(rootDir, 'lib/react-input-mask.production.min.js');
 	const lib = require(libPath);
 	const InputElement = lib.default || lib;
 
 	it('should return a string', () => {
-		const result = ReactDOMServer.renderToString(
-			<InputElement value="some" mask="799" />
-		);
+		const result = ReactDOMServer.renderToString(<InputElement value="some" mask="799" />);
 		expect(typeof result).to.equal('string');
 	});
 });
@@ -30,9 +25,7 @@ describe('UMD build', () => {
 	const InputElement = lib.default || lib;
 
 	it('should return a string', () => {
-		const result = ReactDOMServer.renderToString(
-			<InputElement value="some" mask="799" />
-		);
+		const result = ReactDOMServer.renderToString(<InputElement value="some" mask="799" />);
 		expect(typeof result).to.equal('string');
 	});
 });
