@@ -3,7 +3,6 @@
 
 import React from 'react';
 import TestUtils from 'react-dom/test-utils';
-import { expect } from 'chai'; // eslint-disable-line import/no-extraneous-dependencies
 import { createRoot } from 'react-dom/client';
 import * as deferUtils from '../../src/utils/defer';
 import Input from '../../src/index';
