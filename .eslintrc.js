@@ -107,7 +107,14 @@ module.exports = {
 			}
 		},
 		{
-			files: ['*.config.js', '*.config.mjs', 'webpack.config.js', 'rollup.config.mjs', 'karma.conf.js'],
+			files: ['tests/**/*'],
+			plugins: ['jest'],
+			env: {
+				'jest/globals': true
+			}
+		},
+		{
+			files: ['*.config.js', '*.config.mjs', 'webpack.config.js', 'rollup.config.mjs'],
 			rules: {
 				'import/no-extraneous-dependencies': [
 					ERROR,
