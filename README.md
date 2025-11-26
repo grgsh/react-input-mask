@@ -1,14 +1,7 @@
-# @mona-health/react-input-mask
+# @colonnade-x/react-input-mask
 
-<!--
-[![Build Status](https://img.shields.io/travis/sanniassin/react-input-mask/master.svg?style=flat)](https://travis-ci.org/sanniassin/react-input-mask) [![npm version](https://img.shields.io/npm/v/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/react-input-mask) [![npm downloads](https://img.shields.io/npm/dm/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/react-input-mask)
--->
-
-[![npm version](https://img.shields.io/npm/v/@mona-health/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/@mona-health/react-input-mask)
-
-Input masking component for React. Made with attention to UX.
-
-#### [Demo](http://sanniassin.github.io/react-input-mask/demo.html)
+[![npm version](https://img.shields.io/npm/v/@colonnade-x/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/@colonnade-x/react-input-mask)
+Masked input component for React (improved fork of react-input-mask).
 
 # Table of Contents
 
@@ -20,16 +13,16 @@ Input masking component for React. Made with attention to UX.
 # Installation
 
 ```sh
-npm install --save @mona-health/react-input-mask
+npm install --save @colonnade-x/react-input-mask
 ```
 
-react-input-mask v3 requires **React 16.8.0 or later.** If you need support for older versions, use [version 2](https://github.com/sanniassin/react-input-mask/tree/v2).
+react-input-mask v4 requires **React 16.8.0 or later.** If you need support for older versions, use [version 2](https://github.com/sanniassin/react-input-mask/tree/v2).
 
 # Usage
 
 ```jsx
 import React from 'react';
-import InputMask from '@mona-health/react-input-mask';
+import InputMask from '@colonnade-x/react-input-mask';
 
 function DateInput(props) {
 	return (
@@ -145,7 +138,7 @@ To use another component instead of regular `<input />` provide it as children. 
 
 ```jsx
 import React from 'react';
-import InputMask from '@mona-health/react-input-mask';
+import InputMask from '@colonnade-x/react-input-mask';
 import MaterialInput from '@material-ui/core/Input';
 
 // Will work fine
