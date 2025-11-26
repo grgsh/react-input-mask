@@ -1,6 +1,7 @@
 # @colonnade-x/react-input-mask
 
 [![npm version](https://img.shields.io/npm/v/@colonnade-x/react-input-mask.svg?style=flat)](https://www.npmjs.com/package/@colonnade-x/react-input-mask)
+
 Masked input component for React (improved fork of react-input-mask).
 
 # Table of Contents
