@@ -7,7 +7,13 @@
 				"loose": true
 			}
 		],
-		"@babel/preset-react"
+		"@babel/preset-react",
+		[
+			"@babel/preset-typescript",
+			{
+				"onlyRemoveTypeImports": true
+			}
+		]
 	],
 	"plugins": [
 		[
@@ -40,15 +46,17 @@
 					}
 				],
 				"@babel/preset-react",
-				"@babel/preset-typescript"
+				[
+					"@babel/preset-typescript",
+					{
+						"onlyRemoveTypeImports": true
+					}
+				]
 			],
 			"plugins": [
 				"@babel/plugin-transform-proto-to-assign",
 				"@babel/transform-modules-commonjs"
 			]
-		},
-		"rollup": {
-			"plugins": ["babel-plugin-dev-expression"]
 		}
 	}
 }
