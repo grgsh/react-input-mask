@@ -56,7 +56,9 @@ export type Props = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'children'
 	beforeMaskedStateChange?(states: BeforeMaskedStateChangeStates): InputState;
 
 	children?: React.ReactElement<React.InputHTMLAttributes<HTMLInputElement>>; // | ((inputProps: any) => React.ReactNode);
-	render?: (inputProps: React.InputHTMLAttributes<HTMLInputElement>) => React.ReactElement;
+	render?: (
+		inputProps: React.InputHTMLAttributes<HTMLInputElement> & { ref: (node: HTMLInputElement | null) => void }
+	) => React.ReactElement;
 };
 
 // Legacy interface name for backward compatibility
@@ -333,8 +335,7 @@ const InputMask = forwardRef<HTMLInputElement, Props>((props, forwardedRef) => {
 		return <ForwardedChild element={onlyChild} {...inputProps} ref={refCallback} />;
 	}
 	if (render) {
-		const element = render(inputProps);
-		return <ForwardedChild element={element} {...inputProps} ref={refCallback} />;
+		return render({ ...inputProps, ref: refCallback });
 	}
 
 	return <input ref={refCallback} {...inputProps} />;
