@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-useless-path-segments
 import { defaultFormatChars } from '../constants';
 
 export type MaskChar = string | RegExp;
